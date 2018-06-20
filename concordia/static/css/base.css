@@ -134,6 +134,10 @@ a.gray-text:hover {
   padding-right: 0;
 }
 
+main {
+  min-height: calc(100vh - 4.5rem);
+}
+
 input {
   color: rgba(51,51,51,.7); /* #333333 */
 }
