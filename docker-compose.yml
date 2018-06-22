@@ -34,7 +34,10 @@ services:
     depends_on:
       - rabbit
     volumes:
+      - ./importer/.:/app
       - images_volume:/concordia_images
+    ports:
+      - 8000:8000
 
   prometheus:
     image: prom/prometheus:latest

@@ -16,8 +16,9 @@ COPY requirements_importer.txt ./
 COPY vendor /vendor
 RUN pip3 install -r requirements_devel.txt
 
+copy config /config
 WORKDIR /app
-COPY . .
+COPY importer/. .
 RUN pip3 install --no-cache-dir -e .
 
-CMD [ "/bin/bash", "importer/entrypoint.sh" ]
+CMD [ "/bin/bash", "entrypoint.sh" ]

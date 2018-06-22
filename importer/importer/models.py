@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 sys.path.append(BASE_DIR)
 
-sys.path.append(os.path.join(BASE_DIR, 'config'))
+sys.path.append(os.path.join(BASE_DIR, '../config'))
 from config import Config
 
 
