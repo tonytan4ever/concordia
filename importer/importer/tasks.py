@@ -15,7 +15,7 @@ def check_completeness():
     importer = Importer()
     return importer.check_completeness()
 
-@shared_task
+@shared_task(autoretry_for=(RequestException,), retry_backoff=True, retry_backoff_max=1200)
 def download_item(item_identifier):
     importer = Importer()
     importer.download_item(item_identifier)
