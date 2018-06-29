@@ -17,7 +17,12 @@
       <div class="d-flex navbar-brand">
         <a class="mr-1 my-auto" href="#"><img src="{% static "img/loc.svg" %}"></a>
         <span class="vl mx-2 my-auto"></span>
+        {% if request.path == '/' %}
         <h1><a class="gray-text align-middle d-none d-md-inline" href="#">citizen historian</a><a class="gray-text align-middle d-md-none" href="#">chc</a></h1>
+        {% endif %}
+        {% else %}
+        <h1><a class="gray-text align-middle d-none d-md-inline" href="/">citizen historian</a><a class="gray-text align-middle d-md-none" href="/">chc</a></h1>
+        {% endif %}
       </div>
     <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#nav-menu" aria-controls="nav-menu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -25,8 +30,9 @@
 
     <div class="collapse navbar-collapse text-center" id="nav-menu">
       <ul class="navbar-nav ml-auto">
+        {% if request.path == '/' %}
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'transcriptions:transcribe' %}">Transcribe</a>
@@ -38,6 +44,64 @@
             <a class="dropdown-item" href="{% url 'user-profile' %}">{{ user }} profile</a>
             {% if user.is_superuser %}
             <a class="dropdown-item" href="{% url 'admin:index' %}">Admin pages</a>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'registration_register' %}">Register</a>
+        </li>
+        {% endif %}
+
+        {% elif '/transcribe' in request.path %}
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Transcribe<span class="sr-only">(current)</span></a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown nav-dropdown">
+          <a class="nav-link dropdown-toggle" href="http://example.com" id="nav-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+          <div class="dropdown-menu" aria-labelledby="nav-dropdown">
+            <a class="dropdown-item" href="{% url 'user-profile' %}">{{ user }} profile</a>
+            {% if user.is_superuser %}
+            <a class="dropdown-item" href="{% url 'admin:index' %}">Admin pages</a>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+        {% endif %}
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'registration_register' %}">Register</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'transcriptions:transcribe' %}">Transcribe</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown nav-dropdown active">
+          <a class="nav-link dropdown-toggle" href="http://example.com" id="nav-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account<span class="sr-only">(current)</span></a>
+          <div class="dropdown-menu" aria-labelledby="nav-dropdown">
+            <a class="dropdown-item" href="{% url 'user-profile' %}">{{ user }} profile</a>
+            {% if user.is_superuser %}
+            <a class="dropdown-item" href="{% url 'admin:index' %}">Admin pages</a>
+            {% endif %}
             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
           </div>
         </li>
@@ -51,15 +115,14 @@
         </li>
         {% endif %}
       </ul>
-      <!-- hidden search form in case we need it later -->
-      <!-- <form class="form-inline my-2 my-md-0">
-        <input class="form-control" type="text" placeholder="Search">
-      </form> -->
     </div>
   </nav>
   </header>
-  <main class="bg-main">
+  <main>
+
       {% block main_content %}{% endblock main_content %}
+    }
+    }
   </main>
   <footer class="container-fluid text-center font-weight-light bg-footer py-default">
     <div class="row">
