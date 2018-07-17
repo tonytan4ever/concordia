@@ -1,3 +1,4 @@
+import boto3
 import csv
 import os
 import shutil
@@ -63,8 +64,20 @@ class ExportCollectionToBagit(TemplateView):
     and tag data.  Executes bagit.py to turn temp directory into bagit
     strucutre.  Builds and exports bagit structure as zip.  Removes all
     temporary directories and files.
-
     """
+
+    s3 = boto3.client("s3",
+                      aws_access_key_id = settings.AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY
+                      )
+    response = s3.list_buckets()
+    buckets = [bucket['Name'] for bucket in response['Buckets']]
+
+    filename = 'airplane.png'
+    filepath = "{0}/concordia/test_collection/airplane/{1}".format(settings.MEDIA_ROOT, filename)
+    bucket_name = 'concordia-test-bucket'
+
+    s3.upload_file(filepath, bucket_name, filename)
 
     template_name = "transcriptions/collection.html"
 
