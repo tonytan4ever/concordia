@@ -79,6 +79,8 @@ class ExportCollectionToBagit(TemplateView):
 
     s3.upload_file(filepath, bucket_name, filename)
 
+    s3.download_file(bucket_name, filename, filepath.replace(".png","_d.png"))
+
     template_name = "transcriptions/collection.html"
 
     def get(self, request, *args, **kwargs):
