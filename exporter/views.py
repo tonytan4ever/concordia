@@ -73,13 +73,21 @@ class ExportCollectionToBagit(TemplateView):
     response = s3.list_buckets()
     buckets = [bucket['Name'] for bucket in response['Buckets']]
 
-    filename = 'airplane.png'
-    filepath = "{0}/concordia/test_collection/airplane/{1}".format(settings.MEDIA_ROOT, filename)
+    filename = "tulips.png"
+    dir_name = "test_dir"
+    src_path = "{0}/concordia/test_collection/tulips/{1}".format(settings.MEDIA_ROOT, filename)
+    s3_path = "{0}/{1}".format(dir_name, filename)
     bucket_name = 'concordia-test-bucket'
 
-    s3.upload_file(filepath, bucket_name, filename)
+    s3.upload_file(src_path, bucket_name, s3_path)
 
-    s3.download_file(bucket_name, filename, filepath.replace(".png","_d.png"))
+    s3.download_file(bucket_name, s3_path, src_path.replace(".png","_d.png"))
+
+    objects_to_delete = s3.list_objects(Bucket=bucket_name, Prefix=dir_name)
+    delete_keys = {"Objects": []}
+    delete_keys["Objects"] = [{"Key": k} for k in [obj["Key"] for obj in objects_to_delete.get("Contents", [])]]
+    s3.delete_objects(Bucket=bucket_name, Delete=delete_keys)
+
 
     template_name = "transcriptions/collection.html"
 
