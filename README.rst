@@ -17,14 +17,19 @@ the concordia app and it is not included in the source code respository.
 
 You must create this file in the concordia root directory.
 
-This file contains three values, which are:
+This file contains five values, which are:
 ::
 
     GRAFANA_ADMIN_PW=<grafana_admin_password_here>
     CONCORDIA_ADMIN_PW=<concordia_admin_password_here>
     POSTGRESQL_PW=<postgresql_concordia_user_password_here>
+    RECAPTCHA_PUBLIC_KEY=<google_recaptcha_public_key_here>
+    RECAPTCHA_PRIVATE_KEY=<google_recaptcha_private_key_here>
 
 Replace each <.._password_here> above with your actual password.
+Replace each <.._key_here> above with your actual Google recaptcha public/private key.
+
+You can get a Google recaptchaV2 (our version) public/private key from here: <https://www.google.com/recaptcha/admin#list>
 
 The script to create the concordia admin user uses the value matching CONCORDIA_ADMIN_PW as 
 the "admin" user password.
@@ -72,6 +77,10 @@ Instead of doing ``docker-compose up`` as above, instead do the following::
     $ docker-compose up -d rabbit
 
 This will keep the database in its container for convenience.
+
+Set up your recaptcha keys if you are going to test recaptcha related functionality:
+    $ export RECAPTCHA_PUBLIC_KEY=<your_recaptcha_private_key>
+    $ export RECAPTCHA_PRIVATE_KEY=<your_recaptcha_private_key>
 
 Next, set up a Python virtual environment, install pipenv <https://docs.pipenv.org/>, and other 
 Python prerequisites::
