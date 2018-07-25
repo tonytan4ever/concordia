@@ -82,8 +82,8 @@ INSTALLED_APPS = [
     "django_prometheus_metrics",
 ] + get_machina_apps()
 
-RECAPTCHA_PUBLIC_KEY = '6Ld9aWUUAAAAAEo29EEz4Vh6Gp9_985uRq0W-CNb'
-RECAPTCHA_PRIVATE_KEY = '6Ld9aWUUAAAAAEiBfO9Aprf44dY6TXdN80THvJJF'
+RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY", "")
+RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY", "")
 
 if DEBUG:
     INSTALLED_APPS += ["django_extensions"]

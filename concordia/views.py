@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
+from django.http import HttpResponseBadRequest
 from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -182,6 +183,12 @@ class ConcordiaAssetView(TemplateView):
 
     def post(self, *args, **kwargs):
         self.get_context_data()
+        if self.request.user.is_anonymous:
+            recaptcha_resp = self.request.POST.get("g-recaptcha-response",
+                                                   None)
+            if recaptcha_resp is None:
+                return HttpResponseBadRequest("Missing recaptcha response for "
+                                              "anonymous transcribing")
         asset = Asset.objects.get(collection__slug=self.args[0], slug=self.args[1])
         if "tx" in self.request.POST:
             tx = self.request.POST.get("tx")
