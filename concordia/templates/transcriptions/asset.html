@@ -1,6 +1,9 @@
 {% extends "transcriptions/base.html" %} {% load staticfiles %}
+{% load recaptcha2 %}
 {% block title %}{{ asset.title }}{% endblock title %}
-{% block head_content %}{% endblock head_content %}
+{% block head_content %}
+{% recaptcha_explicit_support %}
+{% endblock head_content %}
 {% block main_content %}
     <div class="container-fluid">
         <div class="row">
@@ -115,6 +118,25 @@
                                            class="btn btn-primary btn-primary-fixed-width float-left" value="Save">
                                 </td>
                             </tr>
+                            {% if user.is_anonymous %}
+                            <tr id="recaptcha_tr" style="display: none;">
+                                <td id='recaptcha'>
+                                </td>
+                                <script>
+                                    django_recaptcha_callbacks.push(function() {
+                                        grecaptcha.render('recaptcha', {
+                                            'sitekey': '{% recaptcha_key %}',
+                                            'callback': function(val){
+                                            	   var input = $("<input>").attr("type", "hidden").attr("name", "action").val("Save");
+                                            	   $("#save_button").closest('form').append($(input));
+                                            	   $("#save_button").closest('form').submit();
+                                            }
+                                        })
+                                    });
+                                </script>
+                                {% recaptcha_explicit_init %}
+                            </tr>
+                            {% endif %}
                             <tr>
                                 <td>
                                     <input id="review_button" name="action" type="submit"
@@ -122,7 +144,6 @@
                                            value="Submit for Review">
                                 </td>
                             </tr>
-
                             {% if user.is_authenticated %}
                             <tr>
                                 <td>
@@ -216,4 +237,18 @@
         {% endif %}
         show_buttons();
     </script>
+    {% if user.is_anonymous %}
+    <script>
+	    $(document).ready(function(){
+	        $("#save_button").click(function(e){
+	               e.preventDefault();
+	               $(this).removeClass("btn-primary");
+	               $(this).prop("disabled",true);
+	               
+	               $("#recaptcha_tr").show();
+	               
+	        })
+	    })
+    </script>
+    {% endif %}
 {% endblock body_scripts %}
