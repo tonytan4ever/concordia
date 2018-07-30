@@ -226,3 +226,5 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REGISTRATION_URLS = "registration.backends.simple.urls"
+
+PASSWORD_RESET_TIMEOUT_DAYS = 1
