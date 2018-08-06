@@ -259,13 +259,29 @@ class ConcordiaAssetView(TemplateView):
 
     def post(self, *args, **kwargs):
         """
-        Handle POST from trancribe page for individual asset
+        Handle POST from transcribe page for individual asset
         :param args:
         :param kwargs:
         :return: redirect back to same page
         """
         self.get_context_data()
         asset = Asset.objects.get(collection__slug=self.args[0], slug=self.args[1])
+
+        if self.request.POST.get("action").lower() == 'contact manager':
+            return render(
+                self.request,
+                'contact.html',
+                context={
+                    'form': ConcordiaContactUsForm(
+                        initial={
+                            'link': self.request.build_absolute_uri(),
+                            'email': (None
+                                      if self.request.user.is_anonymous
+                                      else self.request.user.email)
+                        }
+                    )
+                }
+            )
         if self.request.user.is_anonymous:
             captcha_form = CaptchaEmbedForm(self.request.POST)
             if not captcha_form.is_valid():
