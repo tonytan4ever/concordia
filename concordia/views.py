@@ -268,20 +268,8 @@ class ConcordiaAssetView(TemplateView):
         asset = Asset.objects.get(collection__slug=self.args[0], slug=self.args[1])
 
         if self.request.POST.get("action").lower() == 'contact manager':
-            return render(
-                self.request,
-                'contact.html',
-                context={
-                    'form': ConcordiaContactUsForm(
-                        initial={
-                            'link': self.request.build_absolute_uri(),
-                            'email': (None
-                                      if self.request.user.is_anonymous
-                                      else self.request.user.email)
-                        }
-                    )
-                }
-            )
+            return redirect(reverse('contact'))
+
         if self.request.user.is_anonymous:
             captcha_form = CaptchaEmbedForm(self.request.POST)
             if not captcha_form.is_valid():
@@ -421,6 +409,19 @@ class ContactUsView(FormView):
     template_name = "contact.html"
     form_class = ConcordiaContactUsForm
     success_url = '.'
+
+    def get_initial(self):
+        return {
+            'email': (
+                None
+                if self.request.user.is_anonymous
+                else self.request.user.email
+            ),
+            'link': (
+                self.request.META.get('HTTP_REFERER')
+                if self.request.META.get('HTTP_REFERER') else None
+            )
+        }
 
     def post(self, *args, **kwargs):
         email = html.escape(self.request.POST.get("email") or "")
