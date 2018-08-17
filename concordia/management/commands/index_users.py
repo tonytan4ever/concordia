@@ -15,7 +15,7 @@ class Command(BaseCommand):
             required=True,
             default='http://localhost:9200/',
             dest='es_host',
-            help='Connection string to Elasticsearch host',
+            help='Name of the index to track registered users',
         )
         parser.add_argument(
             '--index-name',
