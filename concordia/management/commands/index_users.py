@@ -35,5 +35,8 @@ class Command(BaseCommand):
             # TODO: determine query_params (mappings) key value pairs dict
             es.create_index(index=index_name, settings={}, query_params={})
         except IndexAlreadyExistsError as _:
-            self.stdout.write(
+            self.stderr.write(
                 'Skipping index creation because it already exists.')
+        else:
+            self.stdout.write(
+                'Successfully created index {0}'.format(index_name))
