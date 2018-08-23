@@ -38,3 +38,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FILE_PATH = "/tmp/concordia-messages"  # change this to a proper location
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "")
 DEFAULT_TO_EMAIL = DEFAULT_FROM_EMAIL
+
+REGISTRATION_URLS = "registration.backends.hmac.urls"
+REGISTRATION_SALT = "registration"  # doesn't need to be secret
+
+ACCOUNT_ACTIVATION_DAYS = 1  # required for HMAC registration two-step-flow
