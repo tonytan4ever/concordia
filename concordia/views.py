@@ -339,7 +339,7 @@ class ConcordiaAssetView(TemplateView):
             )
             asset.status = status
             asset.save()
-        if "tags" in self.request.POST and self.request.user.is_authenticated == True:
+        elif "tags" in self.request.POST and self.request.user.is_authenticated == True:
             tags = self.request.POST.get("tags").split(",")
             utags, status = UserAssetTagCollection.objects.get_or_create(
                 asset=asset, user_id=self.request.user.id
